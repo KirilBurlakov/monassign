@@ -81,6 +81,9 @@ public class Main extends Application {
 		
 		launch(args);
 	}
+	
+	
+	
 	//This bad boy draws the city on the maps by going through the ArrayList with the cities
 	//We can probably draw roads here aswell 
 	private void drawMap(GraphicsContext gc, ArrayList<City> cities) {

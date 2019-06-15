@@ -2,14 +2,22 @@ package application;
 
 public class Road {
 	private int distance;
-	private String idTo;
-	private String idFrom;
+	private int posXFrom;
+	private int posYFrom;
+	private int posXTo;
+	private int posYTo;
+
 	
-	public Road(int distance, String idTo, String idFrom) {
+
+
+
+	public Road(int distance, int posXFrom, int posYFrom, int posXTo, int posYTo) {
 		super();
 		this.distance = distance;
-		this.idTo = idTo;
-		this.idFrom = idFrom;
+		this.posXFrom = posXFrom;
+		this.posYFrom = posYFrom;
+		this.posXTo = posXTo;
+		this.posYTo = posYTo;
 	}
 
 	public int getDistance() {
@@ -20,20 +28,36 @@ public class Road {
 		this.distance = distance;
 	}
 
-	public String getIdTo() {
-		return idTo;
+	public int getPosXTo() {
+		return posXTo;
 	}
 
-	public void setIdTo(String idTo) {
-		this.idTo = idTo;
+	public void setPosXTo(int posXTo) {
+		this.posXTo = posXTo;
 	}
 
-	public String getIdFrom() {
-		return idFrom;
+	public int getPosYTo() {
+		return posYTo;
 	}
 
-	public void setIdFrom(String idFrom) {
-		this.idFrom = idFrom;
+	public void setPosYTo(int posYTo) {
+		this.posYTo = posYTo;
+	}
+
+	public int getPosXFrom() {
+		return posXFrom;
+	}
+
+	public void setPosXFrom(int posXFrom) {
+		this.posXFrom = posXFrom;
+	}
+
+	public int getPosYFrom() {
+		return posYFrom;
+	}
+
+	public void setPosYFrom(int posYFrom) {
+		this.posYFrom = posYFrom;
 	}
 	
 	

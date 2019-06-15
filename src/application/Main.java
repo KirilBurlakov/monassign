@@ -57,7 +57,7 @@ public class Main extends Application {
             	
             	//Gets the cities from the database, newValue is the index of the currently selected list item 
         		ArrayList<City> cities = SQL.getCities((int) newValue + 1);
-        		drawMap(gc, cities);
+        		drawMap(gc, cities, SQL.getRoads((int)newValue + 1));
                 	
             }
 
@@ -86,7 +86,7 @@ public class Main extends Application {
 	
 	//This bad boy draws the city on the maps by going through the ArrayList with the cities
 	//We can probably draw roads here aswell 
-	private void drawMap(GraphicsContext gc, ArrayList<City> cities) {
+	private void drawMap(GraphicsContext gc, ArrayList<City> cities, ArrayList<Road> roads) {
 		
 		gc.clearRect(0, 0, 900, 600);
 		gc.setFill(Color.LIGHTGRAY);
@@ -100,6 +100,12 @@ public class Main extends Application {
 		{
 			gc.fillRect(cities.get(i).getPosX(), cities.get(i).getPosY(), 8, 8);
 			gc.fillText(cities.get(i).getName(), cities.get(i).getPosX() + 10, cities.get(i).getPosY() + 15);
+		}
+		
+		for(int i = 0; i < roads.size(); i++)
+		{
+			gc.strokeLine(roads.get(i).getPosXFrom() + 5, roads.get(i).getPosYFrom() + 5, roads.get(i).getPosXTo() + 5, roads.get(i).getPosYTo() + 5);
+			gc.fillText(Integer.toString(roads.get(i).getDistance()), ((roads.get(i).getPosXFrom() + roads.get(i).getPosXTo()) / 2) + 10, (roads.get(i).getPosYFrom() + roads.get(i).getPosYTo()) / 2);
 		}
 
 	}

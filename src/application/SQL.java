@@ -74,5 +74,32 @@ public class SQL {
 		return maps;
 	}
 	
+	public static ArrayList<Road> getRoads(int mapID)
+	{
+		ArrayList<Road> roads = new ArrayList<Road>();
+		try {
+            s = conn.prepareStatement("select R.Distance, Cfrom.Name, Cfrom.PosX, Cfrom.PosY, Cto.Name, Cto.PosX, Cto.PosY " + 
+            							"FROM ROAD R " + 
+            							"INNER JOIN CITY Cfrom ON R.IDfrom = Cfrom.ID " + 
+            							"INNER JOIN CITY Cto ON R.IDto = Cto.ID " + 
+            							"WHERE R.MapID = " + mapID);
+			rs = s.executeQuery();
+			while (rs.next()) {
+				//While there are rows, save them into the ArrayList
+				roads.add(new Road(Integer.parseInt(rs.getString(1)), 
+						Integer.parseInt(rs.getString(3)), Integer.parseInt(rs.getString(4)), 
+						Integer.parseInt(rs.getString(6)), Integer.parseInt(rs.getString(7))));
+			}
+		
+		//Whenever you work with sql, this try-catch block has to be present	
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} 
+
+		return roads;
+	}
+	
+
+	
 
 }

@@ -20,23 +20,27 @@ public class SQL {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		//This final stuff should be added in the end
-		} /*
+		} 
 		finally {
 			try {
 				if (conn != null) {
-					//conn.close();
+					conn.close();
 				}
 			} catch (SQLException ex) {
 				System.out.println(ex.getMessage());
 			}
 		}
-		*/
+		
 	}
 	
 	public static ArrayList<City> getCities(int mapID)
 	{
 		ArrayList<City> cities = new ArrayList<City>();
 		try {
+			// db parameters
+			String url = "jdbc:sqlite:C:/sql/maps.db";
+			// create a connection to the database
+			conn = DriverManager.getConnection(url);
             s = conn.prepareStatement("SELECT * " +
 										"FROM CITY " +
             							"WHERE MapId = " + mapID);
@@ -45,39 +49,70 @@ public class SQL {
 				//While there are rows, save them into the ArrayList
 				cities.add(new City(Integer.parseInt(rs.getString(4)), Integer.parseInt(rs.getString(5)), rs.getString(3), rs.getString(2)));
 			}
-		
+			
 		//Whenever you work with sql, this try-catch block has to be present	
-		} catch (SQLException e) {
+		} 
+		catch (SQLException e) {
 			System.out.println(e.getMessage());
 		} 
-
-		return cities;
+		finally {
+			try {
+				if (conn != null) {
+					System.out.println("Connection in getCities is closed.");
+					conn.close();
+					return cities;
+				}
+			} catch (SQLException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
+		return null;
 	}
 	
 	//Same logic as the getCities() method, but saves just the name
 	//Probably maps will have to become their own class, but for now it is enough to save only the name
-	public static ArrayList<String> getMaps()
+	public static ArrayList<Map> getMaps()
 	{
-		ArrayList<String> maps = new ArrayList<String>();
+		ArrayList<Map> maps = new ArrayList<Map>();
 		try {
+			
+			// db parameters
+			String url = "jdbc:sqlite:C:/sql/maps.db";
+			// create a connection to the database
+			conn = DriverManager.getConnection(url);
             s = conn.prepareStatement("SELECT * " +
 										"FROM MAP");
 			rs = s.executeQuery();
 			while (rs.next()) {
 				
-				maps.add(rs.getString(2));
+				maps.add(new Map(Integer.parseInt(rs.getString(1)), rs.getString(2)));
 			}
+			
 		//Whenever you work with sql, this try-catch block has to be present	
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
-		} 
-		return maps;
+		} finally {
+			try {
+				if (conn != null) {
+					System.out.println("Connection in getMaps is closed.");
+					conn.close();
+					return maps;
+				}
+			} catch (SQLException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
+		return null;
 	}
 	
 	public static ArrayList<Road> getRoads(int mapID)
 	{
 		ArrayList<Road> roads = new ArrayList<Road>();
 		try {
+			// db parameters
+			String url = "jdbc:sqlite:C:/sql/maps.db";
+			// create a connection to the database
+			conn = DriverManager.getConnection(url);
             s = conn.prepareStatement("select R.Distance, Cfrom.Name, Cfrom.PosX, Cfrom.PosY, Cto.Name, Cto.PosX, Cto.PosY " + 
             							"FROM ROAD R " + 
             							"INNER JOIN CITY Cfrom ON R.IDfrom = Cfrom.ID " + 
@@ -91,13 +126,22 @@ public class SQL {
 						Integer.parseInt(rs.getString(3)), Integer.parseInt(rs.getString(4)), 
 						Integer.parseInt(rs.getString(6)), Integer.parseInt(rs.getString(7))));
 			}
-		
+			
 		//Whenever you work with sql, this try-catch block has to be present	
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
-		} 
-
-		return roads;
+		}  finally {
+			try {
+				if (conn != null) {
+					System.out.println("Connection in getRoads is closed.");
+					conn.close();
+					return roads;
+				}
+			} catch (SQLException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
+		return null;
 	}
 	
 

@@ -5,6 +5,7 @@ import java.sql.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -17,6 +18,7 @@ import javafx.scene.shape.ArcType;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxListCell;
+import javafx.scene.input.MouseEvent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
@@ -43,10 +45,22 @@ public class Main extends Application {
 		listView.setEditable(true);
 		
 		//Get the map names from the Database and set them
-		ObservableList<String> items = FXCollections.observableArrayList (
-				SQL.getMaps());
+		ObservableList<String> items = FXCollections.observableArrayList();
+		ArrayList<Map> maps = SQL.getMaps();
+		for(int i = 0; i < maps.size(); i++)
+		{
+			items.add(maps.get(i).getName());
+		}
 		listView.setItems(items);
-		
+		listView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+	        @Override
+	        public void handle(MouseEvent event) {
+	            System.out.println("clicked on " + maps.get(listView.getSelectionModel().getSelectedIndex()).getMapID());
+	            int mapID = maps.get(listView.getSelectionModel().getSelectedIndex()).getMapID();
+	            drawMap(gc, SQL.getCities(mapID), SQL.getRoads(mapID));
+	        }
+		});
+		/*
 		//Some selection magick, I have zero idea how this thing works, just found it on the internet
 		//Probably need to be changed into a Event Handler
 		listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -62,7 +76,7 @@ public class Main extends Application {
             }
 
         });
-        
+        */
         
 		//Add elements to the stage
 		root.add(listView, 0, 0);
@@ -76,8 +90,6 @@ public class Main extends Application {
 
 
 	public static void main(String[] args) {
-		
-		SQL.connect();
 		
 		launch(args);
 	}

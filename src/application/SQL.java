@@ -5,9 +5,9 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class SQL {
-	static Connection conn = null;
-	static PreparedStatement s = null;
-	static ResultSet rs = null;
+	private static Connection conn = null;
+	private static PreparedStatement s = null;
+	private static ResultSet rs = null;
 	public static void connect() {
 
 		try {
@@ -84,7 +84,8 @@ public class SQL {
             							"INNER JOIN CITY Cto ON R.IDto = Cto.ID " + 
             							"WHERE R.MapID = " + mapID);
 			rs = s.executeQuery();
-			while (rs.next()) {
+			while (rs.next()) 
+			{
 				//While there are rows, save them into the ArrayList
 				roads.add(new Road(Integer.parseInt(rs.getString(1)), 
 						Integer.parseInt(rs.getString(3)), Integer.parseInt(rs.getString(4)), 

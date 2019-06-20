@@ -99,13 +99,15 @@ public class Main extends Application {
 		for(int i = 0; i < cities.size(); i++)
 		{
 			gc.fillRect(cities.get(i).getPosX(), cities.get(i).getPosY(), 8, 8);
-			gc.fillText(cities.get(i).getName(), cities.get(i).getPosX() + 10, cities.get(i).getPosY() + 15);
+			gc.fillText(cities.get(i).getName(), cities.get(i).getPosX() - 20, cities.get(i).getPosY() - 7);
 		}
 		
 		for(int i = 0; i < roads.size(); i++)
 		{
 			gc.strokeLine(roads.get(i).getPosXFrom() + 5, roads.get(i).getPosYFrom() + 5, roads.get(i).getPosXTo() + 5, roads.get(i).getPosYTo() + 5);
-			gc.fillText(Integer.toString(roads.get(i).getDistance()), ((roads.get(i).getPosXFrom() + roads.get(i).getPosXTo()) / 2) + 10, (roads.get(i).getPosYFrom() + roads.get(i).getPosYTo()) / 2);
+			gc.fillText(Integer.toString(roads.get(i).getDistance()), 
+					((roads.get(i).getPosXFrom() + roads.get(i).getPosXTo()) / 2) + 10, 
+					(roads.get(i).getPosYFrom() + roads.get(i).getPosYTo()) / 2);
 		}
 
 	}

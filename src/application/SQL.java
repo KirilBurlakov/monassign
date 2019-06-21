@@ -8,18 +8,22 @@ public class SQL {
 	private static Connection conn = null;
 	private static PreparedStatement s = null;
 	private static ResultSet rs = null;
+	
+	private static final String driverClass = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+	private static final String connectionDescriptor =
+			"jdbc:sqlserver://I-MSSQL-01;databasename=kratzer_db;integratedSecurity=true";
+	
+	//Establish a test connection between
 	public static void connect() {
 
 		try {
-			// db parameters
-			String url = "jdbc:sqlite:C:/sql/maps.db";
-			// create a connection to the database
-			conn = DriverManager.getConnection(url);
-			System.out.println("Connection to SQLite has been established.");
-
+			
+			// Establish JDBC connection
+			Class.forName(driverClass);
+			conn =  DriverManager.getConnection(connectionDescriptor, "", "");
+		//Whenever you work with sql, this try-catch block has to be present
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
-		//This final stuff should be added in the end
 		} 
 		finally {
 			try {
@@ -37,10 +41,11 @@ public class SQL {
 	{
 		ArrayList<City> cities = new ArrayList<City>();
 		try {
-			// db parameters
-			String url = "jdbc:sqlite:C:/sql/maps.db";
-			// create a connection to the database
-			conn = DriverManager.getConnection(url);
+			
+			// Establish JDBC connection
+			Class.forName(driverClass);
+			conn =  DriverManager.getConnection(connectionDescriptor, "", "");
+			
             s = conn.prepareStatement("SELECT * " +
 										"FROM CITY " +
             							"WHERE MapId = " + mapID);
@@ -69,17 +74,16 @@ public class SQL {
 		return null;
 	}
 	
-	//Same logic as the getCities() method, but saves just the name
-	//Probably maps will have to become their own class, but for now it is enough to save only the name
+	//Same logic as the getCities() method
 	public static ArrayList<Map> getMaps()
 	{
 		ArrayList<Map> maps = new ArrayList<Map>();
 		try {
 			
-			// db parameters
-			String url = "jdbc:sqlite:C:/sql/maps.db";
-			// create a connection to the database
-			conn = DriverManager.getConnection(url);
+			// Establish JDBC connection
+			Class.forName(driverClass);
+			conn =  DriverManager.getConnection(connectionDescriptor, "", "");
+			
             s = conn.prepareStatement("SELECT * " +
 										"FROM MAP");
 			rs = s.executeQuery();
@@ -109,10 +113,10 @@ public class SQL {
 	{
 		ArrayList<Road> roads = new ArrayList<Road>();
 		try {
-			// db parameters
-			String url = "jdbc:sqlite:C:/sql/maps.db";
-			// create a connection to the database
-			conn = DriverManager.getConnection(url);
+			// Establish JDBC connection
+			Class.forName(driverClass);
+			conn =  DriverManager.getConnection(connectionDescriptor, "", "");
+			
             s = conn.prepareStatement("select R.Distance, Cfrom.Name, Cfrom.PosX, Cfrom.PosY, Cto.Name, Cto.PosX, Cto.PosY " + 
             							"FROM ROAD R " + 
             							"INNER JOIN CITY Cfrom ON R.IDfrom = Cfrom.ID " + 

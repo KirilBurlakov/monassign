@@ -15,11 +15,9 @@ public class SQL {
 			String url = "jdbc:sqlite:C:/sql/maps.db";
 			// create a connection to the database
 			conn = DriverManager.getConnection(url);
-			System.out.println("Connection to SQLite has been established.");
 
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
-		//This final stuff should be added in the end
 		} 
 		finally {
 			try {
@@ -41,13 +39,13 @@ public class SQL {
 			String url = "jdbc:sqlite:C:/sql/maps.db";
 			// create a connection to the database
 			conn = DriverManager.getConnection(url);
-            s = conn.prepareStatement("SELECT * " +
-										"FROM CITY " +
+            s = conn.prepareStatement("SELECT C.ID, C.Name, C.PosX, C.PosY " +
+										"FROM CITY C " +
             							"WHERE MapId = " + mapID);
 			rs = s.executeQuery();
 			while (rs.next()) {
 				//While there are rows, save them into the ArrayList
-				cities.add(new City(Integer.parseInt(rs.getString(4)), Integer.parseInt(rs.getString(5)), rs.getString(3), rs.getString(2)));
+				cities.add(new City(Integer.parseInt(rs.getString(3)), Integer.parseInt(rs.getString(4)), rs.getString(2), rs.getString(1)));
 			}
 			
 		//Whenever you work with sql, this try-catch block has to be present	
@@ -58,7 +56,6 @@ public class SQL {
 		finally {
 			try {
 				if (conn != null) {
-					System.out.println("Connection in getCities is closed.");
 					conn.close();
 					return cities;
 				}
@@ -70,7 +67,6 @@ public class SQL {
 	}
 	
 	//Same logic as the getCities() method, but saves just the name
-	//Probably maps will have to become their own class, but for now it is enough to save only the name
 	public static ArrayList<Map> getMaps()
 	{
 		ArrayList<Map> maps = new ArrayList<Map>();
@@ -80,8 +76,8 @@ public class SQL {
 			String url = "jdbc:sqlite:C:/sql/maps.db";
 			// create a connection to the database
 			conn = DriverManager.getConnection(url);
-            s = conn.prepareStatement("SELECT * " +
-										"FROM MAP");
+            s = conn.prepareStatement("SELECT M.ID, M.Name " +
+										"FROM MAP M");
 			rs = s.executeQuery();
 			while (rs.next()) {
 				
@@ -94,7 +90,6 @@ public class SQL {
 		} finally {
 			try {
 				if (conn != null) {
-					System.out.println("Connection in getMaps is closed.");
 					conn.close();
 					return maps;
 				}
@@ -133,7 +128,6 @@ public class SQL {
 		}  finally {
 			try {
 				if (conn != null) {
-					System.out.println("Connection in getRoads is closed.");
 					conn.close();
 					return roads;
 				}

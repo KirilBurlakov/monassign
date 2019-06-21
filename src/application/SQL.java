@@ -13,7 +13,7 @@ public class SQL {
 	private static final String connectionDescriptor =
 			"jdbc:sqlserver://I-MSSQL-01;databasename=kratzer_db;integratedSecurity=true";
 	
-	//Establish a test connection between
+	//Establish a test connection
 	public static void connect() {
 
 		try {
@@ -46,13 +46,13 @@ public class SQL {
 			Class.forName(driverClass);
 			conn =  DriverManager.getConnection(connectionDescriptor, "", "");
 			
-            s = conn.prepareStatement("SELECT * " +
-										"FROM CITY " +
+            s = conn.prepareStatement("SELECT C.ID, C.Name, C.PosX, C.PosY " +
+										"FROM CITY C " +
             							"WHERE MapId = " + mapID);
 			rs = s.executeQuery();
 			while (rs.next()) {
 				//While there are rows, save them into the ArrayList
-				cities.add(new City(Integer.parseInt(rs.getString(4)), Integer.parseInt(rs.getString(5)), rs.getString(3), rs.getString(2)));
+				cities.add(new City(Integer.parseInt(rs.getString(3)), Integer.parseInt(rs.getString(4)), rs.getString(2), rs.getString(1)));
 			}
 			
 		//Whenever you work with sql, this try-catch block has to be present	
@@ -84,7 +84,7 @@ public class SQL {
 			Class.forName(driverClass);
 			conn =  DriverManager.getConnection(connectionDescriptor, "", "");
 			
-            s = conn.prepareStatement("SELECT * " +
+            s = conn.prepareStatement("SELECT M.ID, M.Name " +
 										"FROM MAP");
 			rs = s.executeQuery();
 			while (rs.next()) {

@@ -62,9 +62,9 @@ public class Main extends Application {
 	        	
 	        	//The ID of the map is selected via the position of the map in the ListView
 	            int mapID = maps.get(listView.getSelectionModel().getSelectedIndex()).getMapID();
-	            
+	            drawMap(gc, mapID);
 	            //Call of the draw method
-	            drawMap(gc, SQL.getCities(mapID), SQL.getRoads(mapID));
+	            //drawMap(gc, SQL.getCities(mapID), SQL.getRoads(mapID));
 	        }
 		});
 		
@@ -85,6 +85,15 @@ public class Main extends Application {
 		launch(args);
 	}
 	
+	private void drawMap(GraphicsContext gc, int MapID)
+	{
+		gc.clearRect(0, 0, 900, 600);
+		gc.setFill(Color.LIGHTGRAY);
+		gc.fillRect(0, 0, 900, 600);
+		SQL.getCities(gc, MapID);
+		SQL.getRoads(gc, MapID);
+		
+	}
 	
 	
 	//Draw method, which accepts two ArrayLists containing the cities and the roads
@@ -93,6 +102,7 @@ public class Main extends Application {
 		gc.clearRect(0, 0, 900, 600);
 		gc.setFill(Color.LIGHTGRAY);
 		gc.fillRect(0, 0, 900, 600);
+		
 
 
 

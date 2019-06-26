@@ -47,7 +47,7 @@ public class SQL {
 			rs = s.executeQuery();
 			while (rs.next()) {
 				gc.fillRect(rs.getInt(2), rs.getInt(3), 8, 8);
-				gc.fillText(rs.getString(1), rs.getInt(2) - 20, rs.getInt(3) - 7);
+				gc.fillText(rs.getString(1), rs.getInt(2) + 10, rs.getInt(3) - 5);
 			}
 			
 		//Whenever you work with sql, this try-catch block has to be present	

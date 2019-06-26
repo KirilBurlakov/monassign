@@ -29,12 +29,11 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) 
 	{
-		
+		//Establish the connection to the database
 		SQL.connect();
+		
 		primaryStage.setTitle("Maps");
 
-
-		
 		GridPane root = new GridPane();
 		
 		//Create the canvas
@@ -47,7 +46,7 @@ public class Main extends Application {
 		listView.setPrefSize(200, 300);
 		listView.setEditable(true);
 		
-		//Get the maps from the Database and add their names to the listView
+		//Get the map names from the Database and add their names to the listView
 		ObservableList<String> items = FXCollections.observableArrayList();
 		SQL.getMaps(items);
 		
@@ -77,7 +76,6 @@ public class Main extends Application {
 	}
 
 
-	//Before we
 	public static void main(String[] args) {
 		
 		launch(args);

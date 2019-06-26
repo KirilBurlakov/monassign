@@ -13,10 +13,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.input.MouseEvent;
 import javafx.beans.value.ChangeListener;
@@ -30,8 +32,14 @@ public class Main extends Application {
 	public void start(Stage primaryStage) 
 	{
 		//Establish the connection to the database
-		SQL.connect();
 		
+		try {
+			SQL.connect();
+		} catch (SQLException e) {
+			showError(e);
+		}
+		
+
 		primaryStage.setTitle("Maps");
 
 		GridPane root = new GridPane();
@@ -48,8 +56,11 @@ public class Main extends Application {
 		
 		//Get the map names from the Database and add their names to the listView
 		ObservableList<String> items = FXCollections.observableArrayList();
-		SQL.getMaps(items);
-		
+		try {
+			SQL.getMaps(items);
+		} catch (SQLException e) {
+			
+		}
 		listView.setItems(items);
 		
 		//ListView Selection
@@ -86,7 +97,11 @@ public class Main extends Application {
 	//Here we also close the connection
     public void stop() 
     {
-    	SQL.disconnect();
+		try {
+			SQL.disconnect();
+		} catch (SQLException e) {
+			showError(e);
+		}
     }
 	
 	private void drawMap(GraphicsContext gc, int MapID)
@@ -100,9 +115,26 @@ public class Main extends Application {
 		
 		//Set the color for drawing to black and draw the roads and the cities
 		gc.setFill(Color.BLACK);
-		SQL.getCities(gc, MapID);
-		SQL.getRoads(gc, MapID);
+		try {
+			SQL.getCities(gc, MapID);
+			SQL.getRoads(gc, MapID);
+		} 
+		catch (SQLException e)
+		{
+			showError(e);
+		}
 		
+	}
+	
+	//If an SQL exception occurs during any operations, it will be caught and a error message will be displayed
+	private void showError(SQLException e) 
+	{
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error alert");
+        alert.setHeaderText(e.getMessage());
+ 
+ 
+        alert.showAndWait();
 	}
 
 }

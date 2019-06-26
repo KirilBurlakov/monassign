@@ -13,7 +13,7 @@ public class SQL {
 	private static PreparedStatement s = null;
 	private static ResultSet rs = null;
 	
-	public static void connect() 
+	public static void connect() throws SQLException
 	{
 		try {
 			// db parameters
@@ -22,23 +22,23 @@ public class SQL {
 			conn = DriverManager.getConnection(url);
 
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw e;
 		} 
 		
 	}
 	
-	public static void disconnect()
+	public static void disconnect() throws SQLException
 	{
 		try {
 			if (conn != null) {
 				conn.close();
 			}
 		} catch (SQLException ex) {
-			System.out.println(ex.getMessage());
+			throw ex;
 		}
 	}
 	
-	public static void getCities(GraphicsContext gc, int mapID)
+	public static void getCities(GraphicsContext gc, int mapID) throws SQLException
 	{
 		try {
             s = conn.prepareStatement("SELECT C.Name, C.PosX, C.PosY " +
@@ -53,12 +53,12 @@ public class SQL {
 		//Whenever you work with sql, this try-catch block has to be present	
 		} 
 		catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw e;
 		} 
 	}
 	
 	//Same logic as the getCities() method, but saves just the name
-	public static void getMaps(ObservableList<String> items)
+	public static void getMaps(ObservableList<String> items) throws SQLException
 	{
 		try {
             s = conn.prepareStatement("SELECT M.ID, M.Name " +
@@ -72,11 +72,11 @@ public class SQL {
 			
 		//Whenever you work with sql, this try-catch block has to be present	
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw e;
 		} 
 	}
 	
-	public static void getRoads(GraphicsContext gc, int mapID)
+	public static void getRoads(GraphicsContext gc, int mapID) throws SQLException
 	{
 		try {
 
@@ -84,7 +84,7 @@ public class SQL {
             							"FROM ROAD R " + 
             							"INNER JOIN CITY Cfrom ON R.IDfrom = Cfrom.ID " + 
             							"INNER JOIN CITY Cto ON R.IDto = Cto.ID " + 
-            							"WHERE R.MapID = " + mapID);
+            							"WHERE R.IDfrom > R.IDto and R.MapID = " + mapID);
 			rs = s.executeQuery();
 			while (rs.next()) 
 			{
@@ -97,7 +97,7 @@ public class SQL {
 			
 		//Whenever you work with SQL, this try-catch block has to be present	
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw e;
 		} 
 	}
 	

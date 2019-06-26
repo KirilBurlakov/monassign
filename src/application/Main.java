@@ -27,7 +27,8 @@ public class Main extends Application {
 
 
 	@Override
-	public void start(Stage primaryStage) {
+	public void start(Stage primaryStage) 
+	{
 		
 		SQL.connect();
 		primaryStage.setTitle("Maps");
@@ -82,9 +83,9 @@ public class Main extends Application {
 		launch(args);
 	}
 	
+	@Override
 	//This method is called by the JavaFx application thread when the program is closed
 	//Here we also close the connection
-    @Override
     public void stop() 
     {
     	SQL.disconnect();

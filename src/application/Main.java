@@ -28,6 +28,8 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		
+		SQL.connect();
 		primaryStage.setTitle("Maps");
 
 
@@ -40,18 +42,13 @@ public class Main extends Application {
 		
 
 		//List View Setup
-		final ListView listView = new ListView();
+		final ListView<String> listView = new ListView<String>();
 		listView.setPrefSize(200, 300);
 		listView.setEditable(true);
 		
 		//Get the maps from the Database and add their names to the listView
 		ObservableList<String> items = FXCollections.observableArrayList();
-		ArrayList<Map> maps = SQL.getMaps();
-		
-		for(int i = 0; i < maps.size(); i++)
-		{
-			items.add(maps.get(i).getName());
-		}
+		SQL.getMaps(items);
 		
 		listView.setItems(items);
 		
@@ -61,10 +58,10 @@ public class Main extends Application {
 	        public void handle(MouseEvent event) {
 	        	
 	        	//The ID of the map is selected via the position of the map in the ListView
-	            int mapID = maps.get(listView.getSelectionModel().getSelectedIndex()).getMapID();
+	            int mapID = listView.getSelectionModel().getSelectedIndex() + 1;
+	            
+	            //Pass the map id to select the desired map
 	            drawMap(gc, mapID);
-	            //Call of the draw method
-	            //drawMap(gc, SQL.getCities(mapID), SQL.getRoads(mapID));
 	        }
 		});
 		
@@ -79,52 +76,34 @@ public class Main extends Application {
 	}
 
 
-
+	//Before we
 	public static void main(String[] args) {
 		
 		launch(args);
 	}
 	
+	//This method is called by the JavaFx application thread when the program is closed
+	//Here we also close the connection
+    @Override
+    public void stop() 
+    {
+    	SQL.disconnect();
+    }
+	
 	private void drawMap(GraphicsContext gc, int MapID)
 	{
+		//Clear the canvas before drawing
 		gc.clearRect(0, 0, 900, 600);
+		
+		//Draw the background
 		gc.setFill(Color.LIGHTGRAY);
 		gc.fillRect(0, 0, 900, 600);
+		
+		//Set the color for drawing to black and draw the roads and the cities
+		gc.setFill(Color.BLACK);
 		SQL.getCities(gc, MapID);
 		SQL.getRoads(gc, MapID);
 		
 	}
-	
-	
-	//Draw method, which accepts two ArrayLists containing the cities and the roads
-	private void drawMap(GraphicsContext gc, ArrayList<City> cities, ArrayList<Road> roads) {
-		
-		gc.clearRect(0, 0, 900, 600);
-		gc.setFill(Color.LIGHTGRAY);
-		gc.fillRect(0, 0, 900, 600);
-		
-
-
-
-		gc.setFill(Color.BLACK);
-
-		//Draw the cities and their names by iterating through the passed ArrayList
-		for(int i = 0; i < cities.size(); i++)
-		{
-			gc.fillRect(cities.get(i).getPosX(), cities.get(i).getPosY(), 8, 8);
-			gc.fillText(cities.get(i).getName(), cities.get(i).getPosX() - 20, cities.get(i).getPosY() - 7);
-		}
-		
-		//Draw the roads and their lengths by iterating through the passed ArrayList
-		for(int i = 0; i < roads.size(); i++)
-		{
-			gc.strokeLine(roads.get(i).getPosXFrom() + 5, roads.get(i).getPosYFrom() + 5, roads.get(i).getPosXTo() + 5, roads.get(i).getPosYTo() + 5);
-			gc.fillText(Integer.toString(roads.get(i).getDistance()), 
-					((roads.get(i).getPosXFrom() + roads.get(i).getPosXTo()) / 2) + 10, 
-					(roads.get(i).getPosYFrom() + roads.get(i).getPosYTo()) / 2);
-		}
-
-	}
-
 
 }
